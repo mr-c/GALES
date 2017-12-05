@@ -189,20 +189,20 @@ outputs:
   outputSource: attributor/the_config
 steps:
 - id: barrnap
-  run: {{cwl_tools_dir}}/barrnap.cwl
+  run: ../tools/barrnap.cwl
   out:
   - {id: barrnap_gff_output}
   in:
   - {id: genomic_fasta, source: barrnap_genomic_fasta}
 - id: aragorn
-  run: {{cwl_tools_dir}}/aragorn.cwl
+  run: ../tools/aragorn.cwl
   out:
   - {id: aragorn_raw_output}
   in:
   - {id: genomic_fasta, source: source_fasta}
   - {id: aragorn_format, source: aragorn_format}
 - id: prodigal
-  run: {{cwl_tools_dir}}/prodigal.cwl
+  run: ../tools/prodigal.cwl
   out:
   - {id: prodigal_annot_file}
   - {id: prodigal_protein_file}
@@ -212,14 +212,14 @@ steps:
   - {id: annotation_out, source: initial_structural_prediction}
   - {id: protein_out, source: initial_protein_out}
 - id: prodigal2gff3
-  run: {{cwl_tools_dir}}/biocode-ConvertProdigalToGFF3.cwl
+  run: ../tools/biocode-ConvertProdigalToGFF3.cwl
   out:
   - {id: output_gff3}
   in:
   - {id: input_file, source: prodigal/prodigal_annot_file}
   - {id: output_file, source: prodigal2gff3_output_file}
 - id: prodigal2fasta
-  run: {{cwl_tools_dir}}/biocode-WriteFastaFromGFF.cwl
+  run: ../tools/biocode-WriteFastaFromGFF.cwl
   out:
   - {id: protein_fasta}
   in:
@@ -229,7 +229,7 @@ steps:
   - {id: fasta, source: source_fasta}
   - {id: feature_type, source: prodigal2fasta_feature_type}
 - id: split_multifasta
-  run: {{cwl_tools_dir}}/biocode-SplitFastaIntoEvenFiles.cwl
+  run: ../tools/biocode-SplitFastaIntoEvenFiles.cwl
   out:
   - {id: fasta_files}
   in:
@@ -237,7 +237,7 @@ steps:
   - {id: file_count, source: fragmentation_count}
   - {id: output_directory, source: out_dir}
 - id: rapsearch2
-  run: {{cwl_tools_dir}}/rapsearch2.cwl
+  run: ../tools/rapsearch2.cwl
   scatter: query_file
   out:
   - {id: output_base}
@@ -248,7 +248,7 @@ steps:
   - {id: thread_count, source: rapsearch2_threads}
   - {id: one_line_desc_count, source: rapsearch2_one_line_desc_count}
 - id: hmmscan
-  run: {{cwl_tools_dir}}/hmmer3-hmmscan.cwl
+  run: ../tools/hmmer3-hmmscan.cwl
   scatter: query_file
   out:
   - {id: output_base}
@@ -260,7 +260,7 @@ steps:
   - {id: output_file, source: hmmscan_output_file}
   - {id: thread_count, source: hmmscan_threads}
 - id: raw2htab
-  run: {{cwl_tools_dir}}/biocode-ConvertHmmscanToHtab.cwl
+  run: ../tools/biocode-ConvertHmmscanToHtab.cwl
   scatter: input_file
   out:
   - {id: htab_file}
@@ -269,14 +269,14 @@ steps:
   - {id: output_htab, source: raw2htab_output_htab}
   - {id: mldbm_file, source: raw2htab_mldbm_file}
 - id: tmhmm
-  run: {{cwl_tools_dir}}/tmhmm.cwl
+  run: ../tools/tmhmm.cwl
   scatter: query_file
   out:
   - {id: tmhmm_out}
   in:
   - {id: query_file, source: split_multifasta/fasta_files}
 - id: attributor
-  run: {{cwl_tools_dir}}/attributor-prok-cheetah.cwl
+  run: ../tools/attributor-prok-cheetah.cwl
   out:
   - {id: output_files}
   - {id: the_config}
